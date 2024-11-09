@@ -33,7 +33,8 @@ app.get('/', (req, res) => {
 
 // POST route server side - Receives weather data and updates projectData
 app.post('/', (req, res) => {
-  projectData = req.body; // Update projectData with the weather data
-  console.log(projectData);
-  res.json({ message: 'Data received successfully' }); // Send a success message
-});
+    const { feelings } = req.body;
+    projectData.feelings = feelings;
+  
+    // You might want to store this data in a database or log it here
+    console.log(projectData);})

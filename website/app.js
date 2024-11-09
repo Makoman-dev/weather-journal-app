@@ -1,57 +1,46 @@
 /* Global Variables */
 // Personal API Key for OpenWeatherMap API
 
-let baseURL = 'http://api.openweathermap.org/geo/1.0/zip?zip='
+let baseURL = 'https://api.openweathermap.org/data/2.5/weather?q='
 let apiKey = '1b14c9a59e2c27e33ed684a98d4a0513';
-const newWeather =  document.getElementById('zip').value;
+let newWeather = document.getElementById('zip').value;
 
 document.getElementById('generate').addEventListener('click', performAction);
 
-function performAction(e){  
-  getWeather(baseURL,newWeather, apiKey)
-}
+async function performAction(){  
 
-
-const getWeather = async (baseURL, animal, key)=>{
-// Fetching Latitude and Longitude from the first api
-  const res = await fetch('http://api.openweathermap.org/geo/1.0/zip?zip='+document.getElementById('zip').value+'&limit=1&appid='+'1b14c9a59e2c27e33ed684a98d4a0513')
+// Fetching weather info
+  const getWeather = (baseURL, apiKey) => {
+  getWeather(baseURL,document.getElementById('zip').value, apiKey)}
+  const res = await fetch(baseURL+document.getElementById('zip').value+'&appid='+apiKey)
+  
   try {
 
     const data = await res.json();
     console.log(data)
-// Using fetched data to fetch weather info
-    const latitude = data.lat;
-    const longitude = data.lon;
-    const weatherApiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
-
-    fetch(weatherApiUrl)
-        .then(res => res.json())
-        .then(data => {
-        console.log(data);   
- // This will print the detailed weather information
-  })
-  const retrieveData = async () =>{
-    const req = await fetch('/');
-    try {
-    // Transform into JSON
-    const Data = await req.json()
-    console.log(Data)
-    // Write updated data to DOM elements
-    document.getElementById('temp').innerHTML = Math.round(Data.temp)+ 'degrees';
-    document.getElementById('content').innerHTML = Data.feel;
-    document.getElementById("date").innerHTML =Data.date;
+    document.getElementById('temp').innerHTML = Math.round(data.temp)+ 'degrees';
+    document.getElementById('content').innerHTML = data.feel;
+    document.getElementById('date').innerHTML =data.date;
     }
     catch(error) {
       console.log("error", error);
       // appropriately handle the error
     }
-   }
-  }  catch(error) {
-    // appropriately handle the error
-    console.log("error", error);
-  }
-  
 }
+
+let input = document.getElementById('feelings').value
+
+fetch(baseURL+document.getElementById('zip').value+'&appid='+apiKey, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(input)
+})
+.then(response => response.json())
+.then(input => console.log(input))
+.catch(error => console.error('Error:',   
+ error));
 
 // Create a new date instance dynamically with JS
 let d = new Date();
