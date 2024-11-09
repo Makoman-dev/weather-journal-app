@@ -1,7 +1,5 @@
 // Setup empty JS object to act as endpoint (consider using an array/object structure)
 let projectData = {};
-let baseURL = "https://api.openweathermap.org/data/2.5/weather?q=";
-let apiKey = "1b14c9a59e2c27e33ed684a98d4a0513";
 
 // Require Express to run server and routes
 const express = require("express");
@@ -28,24 +26,13 @@ const port = 4000;
 const server = app.listen(port, () =>
   console.log(`running on localhost: ${port}`)
 );
-const getWeather = async (newWeather) => {
-  const res = await fetch(baseURL + newWeather + "&appid=" + apiKey);
 
-  try {
-    const data = await res.json();
-    projectData.temp = data.main.temp;
-    console.log(projectData);
-  } catch (error) {
-    console.log("error", error);
-  }
-};
-
-app.post("/", async (req, res) => {
-  const { newWeather } = req.body;
-  await getWeather(newWeather);
+app.post("/weather", async (req, res) => {
+  projectData = req.body;
   res.json({});
 });
 
-app.get("/weather", (req, res) => {
+app.get('/weatherData', (req, res) => {
   res.json(projectData);
 });
+
